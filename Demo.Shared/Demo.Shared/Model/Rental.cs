@@ -15,7 +15,6 @@ namespace Demo.Shared.Model
         }
 
         [JsonProperty("id")]
-        [Key]
         public int Id { get; set; }
 
         [JsonProperty("dailyrate")]

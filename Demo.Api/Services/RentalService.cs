@@ -9,6 +9,7 @@ namespace Demo.Api.Services
     {
         Task<IEnumerable<Rental>> GetRentalsByCriteria(string criteria);
         Task<IEnumerable<Rental>> GetRental(string year, string make, string model);
+        Task<bool> SaveRentals(IEnumerable<Rental> rentals);
     }
     public class RentalService : IRentalService
     {
@@ -33,7 +34,7 @@ namespace Demo.Api.Services
             await _context.RentalItems.AddRangeAsync(rentals.ToArray());
             var result = await _context.SaveChangesAsync();
 
-            return await Task.FromResult(result > 0);
+            return await Task.FromResult(result == rentals.Count());
         }
     }
 }

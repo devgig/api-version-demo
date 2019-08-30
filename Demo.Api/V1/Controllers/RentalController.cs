@@ -46,10 +46,14 @@ namespace Demo.Api.V1.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> Put(IEnumerable<Rental> rentals)
+        public async Task<ActionResult> Put([FromBody] Rental[] rentals)
         {
+            var result = await _rentalService.SaveRentals(rentals);
 
-            return Ok();
+            if (result)
+                return Ok();
+            else
+                return BadRequest();
         }
 
 
