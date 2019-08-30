@@ -1,4 +1,4 @@
-﻿namespace Demo.Ui.Extensions
+﻿namespace Demo.Shared.Extensions
 {
     public static class StringExtensions
     {

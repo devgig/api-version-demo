@@ -1,23 +1,22 @@
 ﻿using Demo.Ui.Core;
-using Demo.Ui.Extensions;
 using Demo.Ui.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Demo.Shared.Extensions;
 
 namespace Demo.Ui
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly RentalUploader _fileUploader;
+        private readonly RentalUploader _rentalUploader;
+        private readonly RentalProvider _rentalProvider;
 
         public MainWindowViewModel()
         {
-            _fileUploader = new RentalUploader();
+            _rentalUploader = new RentalUploader();
+            _rentalProvider = new RentalProvider();
             
 
         }
@@ -48,17 +47,12 @@ namespace Demo.Ui
 
         #endregion
 
-        public ICommand SearchCommand => new AsyncCommand(() => SearchAsync(), () => CanExecuteSearch());
+        public ICommand SearchCommand => new AsyncCommand(() => SearchAsync());
 
-        private bool CanExecuteSearch()
-        {
-            return !String.IsNullOrEmpty(NumberOfDays)
-                 && !String.IsNullOrEmpty(SearchCriteria)
-                 && NumberOfDays.ToNumber() > 0;
-        }
-
+       
         private async Task SearchAsync()
         {
+            var result =  _rentalProvider.GetByCriteria(SearchCriteria);
 
             
         }
@@ -83,7 +77,7 @@ namespace Demo.Ui
             }
             else
             {
-                var finished =  _fileUploader.Upload(uploadFile);
+                var finished =  _rentalUploader.Upload(uploadFile);
                 if (finished)
                 {
                     MessageBox.Show("File uploaded");

@@ -71,7 +71,6 @@
     <Compile Include="Services\RentalEnum.cs" />
     <Compile Include="Services\RentalProvider.cs" />
     <Compile Include="Extensions\RestResponseExtenstion.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Core\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
