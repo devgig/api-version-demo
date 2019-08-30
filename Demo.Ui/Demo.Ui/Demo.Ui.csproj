@@ -60,15 +60,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AsyncCommand.cs" />
-    <Compile Include="FileUploader.cs" />
-    <Compile Include="IErrorHandler.cs" />
+    <Compile Include="Core\AsyncCommand.cs" />
+    <Compile Include="Core\CsvFile.cs" />
+    <Compile Include="Services\RentalUploader.cs" />
+    <Compile Include="Core\IErrorHandler.cs" />
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="RentalProvider.cs" />
-    <Compile Include="RestResponseExtenstion.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="TaskExtensions.cs" />
-    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="Services\RentalEnum.cs" />
+    <Compile Include="Services\RentalProvider.cs" />
+    <Compile Include="Extensions\RestResponseExtenstion.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="Core\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Demo.Shared\Demo.Shared\Demo.Shared.csproj">
+      <Project>{92adb3a4-298c-4e93-8ffb-a4e7130d5e37}</Project>
+      <Name>Demo.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

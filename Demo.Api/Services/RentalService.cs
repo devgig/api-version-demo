@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Demo.Api.V1.Models;
+using Demo.Shared.Model;
 
 namespace Demo.Api.Services
 {
@@ -26,6 +26,14 @@ namespace Demo.Api.Services
         public async Task<IEnumerable<Rental>> GetRentalsByCriteria(string criteria)
         {
             return await Task.FromResult(_context.RentalItems.ToList());
+        }
+
+        public async Task<bool> SaveRentals(IEnumerable<Rental> rentals)
+        {
+            await _context.RentalItems.AddRangeAsync(rentals.ToArray());
+            var result = await _context.SaveChangesAsync();
+
+            return await Task.FromResult(result > 0);
         }
     }
 }

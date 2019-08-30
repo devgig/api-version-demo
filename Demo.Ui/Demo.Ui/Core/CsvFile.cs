@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TextFieldParserCore;
 
-namespace Demo.Api.Core
+namespace Demo.Ui.Core
 {
     public interface ICsvFile
     {
@@ -18,7 +18,12 @@ namespace Demo.Api.Core
         private readonly Stream _stream;
         private  string[] _columns;
 
-       
+        public CsvFile(string filePath)
+        {
+            _filePath = filePath;
+            _columns = ReadColumnStructure(filePath);
+        }
+
         public CsvFile(Stream stream)
         {
             _stream = stream;

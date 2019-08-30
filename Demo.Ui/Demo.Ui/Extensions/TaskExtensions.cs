@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Demo.Ui.Core;
+using System;
 using System.Threading.Tasks;
 
-namespace Demo.Ui
+namespace Demo.Ui.Extensions
 {
     public static class TaskExtensions
     {

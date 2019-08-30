@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Demo.Ui
+namespace Demo.Ui.Core
 {
     public interface IErrorHandler
     {

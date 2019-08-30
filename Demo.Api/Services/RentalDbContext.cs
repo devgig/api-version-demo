@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Demo.Shared.Model;
+using Microsoft.EntityFrameworkCore;
 
-namespace Demo.Api.V1.Models
+namespace Demo.Api.Services
 {
     public class RentalDbContext : DbContext
     {

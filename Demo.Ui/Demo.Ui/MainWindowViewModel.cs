@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Demo.Ui.Core;
+using Demo.Ui.Extensions;
+using Demo.Ui.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +13,11 @@ namespace Demo.Ui
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly FileUploader _fileUploader;
+        private readonly RentalUploader _fileUploader;
 
         public MainWindowViewModel()
         {
-            _fileUploader = new FileUploader();
+            _fileUploader = new RentalUploader();
             
 
         }

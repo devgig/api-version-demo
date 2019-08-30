@@ -9,7 +9,6 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Swashbuckle.AspNetCore.Swagger;
-using Demo.Api.V1.Models;
 
 namespace Demo.Api
 {
@@ -72,7 +71,6 @@ namespace Demo.Api
 
             //Register Services
             services.AddTransient<IRentalService, RentalService>();
-            services.AddTransient<IRentalImportService, RentalImportService>();
         }
 
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

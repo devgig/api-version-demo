@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Demo.Ui.Extensions;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Demo.Ui
+namespace Demo.Ui.Core
 {
     public interface IAsyncCommand : ICommand
     {

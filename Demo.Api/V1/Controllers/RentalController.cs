@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Demo.Api.Services;
-using Demo.Api.V1.Models;
+using Demo.Shared.Model;
 
 namespace Demo.Api.V1.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class RentalController : ControllerBase
@@ -24,7 +25,7 @@ namespace Demo.Api.V1.Controllers
         /// <returns>The requested rental.</returns>
         /// <response code="200">Rentals successfully retrieved.</response>
         /// <response code="404">No rentals found for the criteria.</response>
-        [HttpGet]
+        [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<IEnumerable<Rental>>> Get(string criteria)
@@ -36,8 +37,24 @@ namespace Demo.Api.V1.Controllers
                 return NotFound();
         }
 
-       
+        /// <summary>
+        /// Uploads Rentals
+        /// </summary>
+        /// <param name="rentals">List of rentals.</param>
+        /// <response code="201">The upload was successfull.</response>
+        /// <response code="400">The upload is invalid.</response>
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult> Put(IEnumerable<Rental> rentals)
+        {
+
+            return Ok();
+        }
+
+
+
     }
 
-   
+
 }

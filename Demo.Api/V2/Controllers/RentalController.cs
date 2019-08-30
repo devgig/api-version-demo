@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Demo.Api.Services;
-using Demo.Api.V1.Models;
+using Demo.Shared.Model;
 
 namespace Demo.Api.Controllers
 {

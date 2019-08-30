@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace Demo.Api.Core
+namespace Demo.Shared.Extensions
 {
     public static class EnumExtensions
     {

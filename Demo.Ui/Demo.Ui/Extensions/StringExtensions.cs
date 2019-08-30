@@ -1,4 +1,4 @@
-﻿namespace Demo.Api.Core
+﻿namespace Demo.Ui.Extensions
 {
     public static class StringExtensions
     {
@@ -6,6 +6,7 @@
         {
             return int.TryParse(value, out int n) ? n : 0;
         }
+
 
         public static decimal ToDecimal(this string value)
         {

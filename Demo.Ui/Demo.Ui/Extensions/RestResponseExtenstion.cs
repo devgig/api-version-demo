@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using System.Net;
 
-namespace Demo.Ui
+namespace Demo.Ui.Extensions
 {
     public static class RestResponseExtenstion
     {
