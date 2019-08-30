@@ -1,4 +1,6 @@
-﻿namespace Demo.Shared.Extensions
+﻿using System.Globalization;
+
+namespace Demo.Shared.Extensions
 {
     public static class StringExtensions
     {
@@ -10,7 +12,7 @@
 
         public static decimal ToDecimal(this string value)
         {
-            return decimal.TryParse(value, out decimal n) ? n : 0.00M;
+            return decimal.TryParse(value, NumberStyles.AllowCurrencySymbol | NumberStyles.Number, CultureInfo.CurrentCulture.NumberFormat, out decimal n) ? n : 0.00M;
         }
     }
 }

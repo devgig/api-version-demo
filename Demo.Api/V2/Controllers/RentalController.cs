@@ -24,15 +24,16 @@ namespace Demo.Api.Controllers
         /// <param name="year">Rental year.</param>
         /// <param name="make">Rental year.</param>
         /// <param name="model">Rental year.</param>
+        /// <param name="numberOfDays">Number of days to calculate Total Rental Cost</param>
         /// <returns>The requested rental.</returns>
         /// <response code="200">Rentals successfully retrieved.</response>
         /// <response code="404">No rentals found for the criteria.</response>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<IEnumerable<Rental>>> Get(string year, string make, string model)
+        public async Task<ActionResult<IEnumerable<RentalResult>>> Get(string year, string make, string model,int numberOfDays)
         {
-            var rentals = await _rentalService.GetRental(year, make, model);
+            var rentals = await _rentalService.GetRental(year, make, model, numberOfDays);
             if (rentals != null && rentals.Any())
                 return Ok(rentals);
             else

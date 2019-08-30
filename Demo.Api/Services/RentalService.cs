@@ -8,40 +8,57 @@ namespace Demo.Api.Services
 {
     public interface IRentalService
     {
-        Task<IEnumerable<Rental>> GetRentalsByCriteria(string criteria);
-        Task<IEnumerable<Rental>> GetRental(string year, string make, string model);
+        Task<IEnumerable<RentalResult>> GetRentalsByCriteria(string criteria, int numberOfDays);
+        Task<IEnumerable<RentalResult>> GetRental(string year, string make, string model, int numberOfDays);
         Task<bool> SaveRentals(IEnumerable<Rental> rentals);
     }
     public class RentalService : IRentalService
     {
         private readonly RentalDbContext _context;
-        public RentalService(RentalDbContext context)
+        private readonly IRentalValidator _rentalValidator;
+
+        public RentalService(RentalDbContext context, IRentalValidator rentalValidator)
         {
             _context = context;
+            _rentalValidator = rentalValidator;
         }
 
-        public async Task<IEnumerable<Rental>> GetRental(string year, string make, string model)
+        public async Task<IEnumerable<RentalResult>> GetRental(string year, string make, string model, int numberOfDays)
         {
-            return _context.RentalItems.Where(x => x.Year == (year == null ? x.Year : year.ToNumber())
-            && x.Make == (make == null ? x.Make : make) 
-            && x.Model == (model == null ? x.Model : model));
+            var results = _context.RentalItems.Where(x => x.Year == (year == null ? x.Year : year.ToNumber())
+            && x.Make == (make == null ? x.Make : make)
+            && (x.Model == (model == null ? x.Model : model) || x.Model.Contains(model)))
+                .Select(x => new RentalResult(x.Id, x.TotalRentalCost(numberOfDays), x.Year, x.Make, x.Model, x.Owner))
+                    .OrderBy(x => x.TotalRentalCost);
+
+            return results;
+
         }
 
-        public async Task<IEnumerable<Rental>> GetRentalsByCriteria(string criteria)
+        public async Task<IEnumerable<RentalResult>> GetRentalsByCriteria(string criteria, int numberOfDays)
         {
             if (string.IsNullOrEmpty(criteria))
-                return Enumerable.Empty<Rental>();
+                return Enumerable.Empty<RentalResult>();
             else
-                return _context.RentalItems.Where(x => x.Year == criteria.ToNumber() || x.Make == criteria || x.Model == criteria);
+            {
+                var results = _context.RentalItems
+                    .Where(x => x.Year == criteria.ToNumber() || x.Make == criteria || x.Model.Contains(criteria))
+                    .Select(x => new RentalResult(x.Id, x.TotalRentalCost(numberOfDays), x.Year, x.Make, x.Model, x.Owner))
+                    .OrderBy(x => x.TotalRentalCost);
+
+                return results;
+            }
 
         }
 
         public async Task<bool> SaveRentals(IEnumerable<Rental> rentals)
         {
-            await _context.RentalItems.AddRangeAsync(rentals.ToArray());
+            var validRentals = _rentalValidator.Validate(rentals);
+
+            await _context.RentalItems.AddRangeAsync(validRentals);
             var result = await _context.SaveChangesAsync();
 
-            return await Task.FromResult(result == rentals.Count());
+            return await Task.FromResult(result == validRentals.Count());
         }
     }
 }

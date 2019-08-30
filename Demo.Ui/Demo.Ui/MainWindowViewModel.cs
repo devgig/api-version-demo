@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Demo.Shared.Extensions;
+using System.Collections.ObjectModel;
+using Demo.Shared.Model;
 
 namespace Demo.Ui
 {
@@ -17,8 +19,7 @@ namespace Demo.Ui
         {
             _rentalUploader = new RentalUploader();
             _rentalProvider = new RentalProvider();
-            
-
+            RentalItems = new ObservableCollection<RentalResult>();
         }
 
         #region Properties
@@ -39,7 +40,8 @@ namespace Demo.Ui
         public string SearchCriteria
         {
             get { return _searchCriteria; }
-            set {
+            set
+            {
                 _searchCriteria = value;
                 NotifyPropertyChanged();
             }
@@ -49,13 +51,26 @@ namespace Demo.Ui
 
         public ICommand SearchCommand => new AsyncCommand(() => SearchAsync());
 
-       
+
         private async Task SearchAsync()
         {
-            var result =  _rentalProvider.GetByCriteria(SearchCriteria);
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() => { RentalItems.Clear(); }));
 
-            
+            var searchCriteria = SearchCriteria;
+            var numberOfDays = NumberOfDays.ToNumber();
+
+            var rentals = await _rentalProvider.GetByCriteria(searchCriteria, numberOfDays);
+
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+
+                foreach (var rental in rentals)
+                    RentalItems.Add(rental);
+            }));
+
         }
+
+        public ObservableCollection<RentalResult> RentalItems { get; set; }
 
         public ICommand UploadFileCommand => new AsyncCommand(() => OpenFileDialogAsync());
 
@@ -77,7 +92,7 @@ namespace Demo.Ui
             }
             else
             {
-                var finished =  _rentalUploader.Upload(uploadFile);
+                var finished = _rentalUploader.Upload(uploadFile);
                 if (finished)
                 {
                     MessageBox.Show("File uploaded");

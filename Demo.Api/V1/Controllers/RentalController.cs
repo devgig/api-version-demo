@@ -22,15 +22,16 @@ namespace Demo.Api.V1.Controllers
         /// Get Rentals based on criteria
         /// </summary>
         /// <param name="criteria">Criteria used to return the rental.</param>
+        /// <param name="numberOfDays">Number of days to calculate Total Rental Cost</param>
         /// <returns>The requested rental.</returns>
         /// <response code="200">Rentals successfully retrieved.</response>
         /// <response code="404">No rentals found for the criteria.</response>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<IEnumerable<Rental>>> Get(string criteria)
+        public async Task<ActionResult<IEnumerable<RentalResult>>> Get(string criteria, int numberOfDays)
         {
-            var rentals = await _rentalService.GetRentalsByCriteria(criteria);
+            var rentals = await _rentalService.GetRentalsByCriteria(criteria, numberOfDays);
             if (rentals != null && rentals.Any())
                 return Ok(rentals);
             else

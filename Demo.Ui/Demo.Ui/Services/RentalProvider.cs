@@ -2,23 +2,26 @@
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Demo.Ui.Services
 {
     public interface IRentalProvider
     {
-        IEnumerable<Rental> GetByCriteria(string criteria);
+        Task<IEnumerable<RentalResult>> GetByCriteria(string criteria, int numberOfDays);
     }
     public class RentalProvider : IRentalProvider
     {
-        public IEnumerable<Rental> GetByCriteria(string criteria)
+        public async  Task<IEnumerable<RentalResult>> GetByCriteria(string criteria, int numberOfDays)
         {
             RestClient restClient = new RestClient("https://localhost:44308/api/v1/rental");
             RestRequest restRequest = new RestRequest(Method.GET);
             restRequest.AddParameter("criteria", criteria);
+            restRequest.AddParameter("numberOfDays", numberOfDays);
             var response = restClient.Execute(restRequest);
 
-            return JsonConvert.DeserializeObject<IEnumerable<Rental>>(response.Content);
+            var rentals = JsonConvert.DeserializeObject<IEnumerable<RentalResult>>(response.Content);
+            return await Task.FromResult(rentals);
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo.Ui"
         mc:Ignorable="d" 
-        Title="MainWindow" Height="450" Width="800">
+        Title="Demo" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -15,20 +15,33 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <!--Row 0 -->
-        <Button Margin="3" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="75" Content="Upload File" Command="{Binding  UploadFileCommand}"></Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button Margin="5" HorizontalAlignment="Left" Width="75" Content="Upload File" Command="{Binding  UploadFileCommand}"></Button>
+            <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" Text="Upload data.csv to seed rentals, then enter days and search criteria for results."></TextBlock>
+        </StackPanel>
         <!--Row 1 -->
-        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Number of Days"></Label>
-        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=NumberOfDays}"></TextBox>
+        <Label Margin="2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Number of Days"></Label>
+        <TextBox Margin="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=NumberOfDays}"></TextBox>
         <!--Row 2 -->
-        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Search Critera(Year, Make or Model)"></Label>
-        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=SearchCriteria}"></TextBox>
+        <Label Margin="2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Search Critera(Year, Make or Model)"></Label>
+        <TextBox Margin="2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=SearchCriteria}"></TextBox>
         <!--Row 3-->
-        <Button Margin="3" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="0" Grid.ColumnSpan="2" Width="75" Content="Search" Command="{Binding SearchCommand}" ></Button> 
+        <Button Margin="5"  Grid.Row="3" HorizontalAlignment="Right" IsDefault="True" Grid.Column="0" Grid.ColumnSpan="2" Width="75" Content="Search" Command="{Binding SearchCommand}" ></Button> 
          <!--Row 4-->
-        <!--RESULTS-->
+        <DataGrid Grid.Row="4" Grid.ColumnSpan="2" RenderOptions.EdgeMode="Aliased" IsReadOnly="True" 
+                  EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding RentalItems}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Total Rental Cost" Binding="{Binding TotalRentalCost}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Year" Binding="{Binding Year}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Make" Binding="{Binding Make}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Model" Binding="{Binding Model}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Owner" Binding="{Binding Owner}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>       
+           
     </Grid>
 </Window>
