@@ -28,6 +28,7 @@ namespace Demo.Ui.Services
             var model = RentalColumn.Model.Description();
             var year = RentalColumn.Year.Description();
             var dailyrate = RentalColumn.DailyRate.Description();
+            var owner = RentalColumn.Owner.Description();
             var list = new LinkedList<Rental>();
 
             var csv = new CsvFile(uploadFile);
@@ -37,7 +38,7 @@ namespace Demo.Ui.Services
                 {
                     Make = line[make],
                     Model = line[model],
-                    Owner = null, //skipped due to garbage data
+                    Owner = line[owner],
                     Year = line[year].ToNumber(),
                     DailyRate = line[dailyrate].ToDecimal()
                 };
