@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Demo.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Demo.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            This method gets called by the runtime. Use this method to add services to the container.
+        </member>
+        <member name="M:Demo.Api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        </member>
+        <member name="T:Demo.Api.SwaggerDefaultValues">
+            <summary>
+            Represents the Swagger/Swashbuckle operation filter used to document the implicit API version parameter.
+            </summary>
+            <remarks>This <see cref="T:Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter"/> is only required due to bugs in the <see cref="T:Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator"/>.
+            Once they are fixed and published, this class can be removed.</remarks>
+        </member>
+        <member name="M:Demo.Api.SwaggerDefaultValues.Apply(Swashbuckle.AspNetCore.Swagger.Operation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            Applies the filter to the specified operation using the given context.
+            </summary>
+            <param name="operation">The operation to apply the filter to.</param>
+            <param name="context">The current operation filter context.</param>
+        </member>
+        <member name="M:Demo.Api.V1.Controllers.RentalController.Get(System.String)">
+            <summary>
+            Get Rentals based on criteria
+            </summary>
+            <param name="criteria">Criteria used to return the rental.</param>
+            <returns>The requested rental.</returns>
+            <response code="200">Rentals successfully retrieved.</response>
+            <response code="404">No rentals found for the criteria.</response>
+        </member>
+        <member name="M:Demo.Api.V1.Controllers.UploadController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Uploads Rental file
+            </summary>
+            <param name="file">The rental file.</param>
+            <response code="201">The upload was successfull.</response>
+            <response code="400">The upload is invalid.</response>
+        </member>
+        <member name="M:Demo.Api.Controllers.RentalController.Get(System.String,System.String,System.String)">
+            <summary>
+            Get Rentals based on year, make or model
+            </summary>
+            <param name="year">Rental year.</param>
+            <param name="make">Rental year.</param>
+            <param name="model">Rental year.</param>
+            <returns>The requested rental.</returns>
+            <response code="200">Rentals successfully retrieved.</response>
+            <response code="404">No rentals found for the criteria.</response>
+        </member>
+    </members>
+</doc>

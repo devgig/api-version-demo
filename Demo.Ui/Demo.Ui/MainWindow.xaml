@@ -1,0 +1,34 @@
+﻿<Window x:Class="Demo.Ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Demo.Ui"
+        mc:Ignorable="d" 
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--Row 0 -->
+        <Button Margin="3" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="75" Content="Upload File" Command="{Binding  UploadFileCommand}"></Button>
+        <!--Row 1 -->
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Number of Days"></Label>
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=NumberOfDays}"></TextBox>
+        <!--Row 2 -->
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Search Critera(Year, Make or Model)"></Label>
+        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=SearchCriteria}"></TextBox>
+        <!--Row 3-->
+        <Button Margin="3" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="0" Grid.ColumnSpan="2" Width="75" Content="Search" Command="{Binding SearchCommand}" ></Button> 
+         <!--Row 4-->
+        <!--RESULTS-->
+    </Grid>
+</Window>
