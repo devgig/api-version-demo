@@ -9,12 +9,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace Demo.Ui.Services
 {
+    public interface IRentalUploader
+    {
+        Task<bool> Upload(string uploadFile);
+    }
+
     public class RentalUploader
     {
-        public bool Upload(string uploadFile)
+        public async Task<bool> Upload(string uploadFile)
         {
 
             var id = RentalColumn.Id.Description();
@@ -43,7 +49,7 @@ namespace Demo.Ui.Services
             RestClient restClient = new RestClient("https://localhost:44308/api/v1/rental");
             RestRequest restRequest = new RestRequest(Method.POST);
             restRequest.AddParameter("application/json", json, ParameterType.RequestBody);
-            var response = restClient.Execute(restRequest);
+            var response = await restClient.ExecutePostTaskAsync(restRequest);
             return response.StatusCode == HttpStatusCode.OK;
         }
 

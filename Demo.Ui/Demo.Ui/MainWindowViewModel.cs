@@ -7,19 +7,24 @@ using System.Windows.Input;
 using Demo.Shared.Extensions;
 using System.Collections.ObjectModel;
 using Demo.Shared.Model;
+using Demo.Ui.Models;
+using System.Linq;
 
 namespace Demo.Ui
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly RentalUploader _rentalUploader;
-        private readonly RentalProvider _rentalProvider;
+        private readonly IRentalV1Provider _rentalProvider;
+        private readonly IRentalV2Provider _rentalV2Provider;
 
         public MainWindowViewModel()
         {
             _rentalUploader = new RentalUploader();
-            _rentalProvider = new RentalProvider();
+            _rentalProvider = new RentalV1Provider();
+            _rentalV2Provider = new RentalV2Provider();
             RentalItems = new ObservableCollection<RentalResult>();
+
         }
 
         #region Properties
@@ -47,6 +52,10 @@ namespace Demo.Ui
             }
         }
 
+        public string Year { get => year; set { year = value; NotifyPropertyChanged(); } }
+        public string Make { get => make; set { make = value; NotifyPropertyChanged(); } }
+        public string Model { get => model; set { model = value; NotifyPropertyChanged(); } }
+
         #endregion
 
         public ICommand SearchCommand => new AsyncCommand(() => SearchAsync());
@@ -58,8 +67,13 @@ namespace Demo.Ui
 
             var searchCriteria = SearchCriteria;
             var numberOfDays = NumberOfDays.ToNumber();
+            var year = Year;
+            var make = Make;
+            var model = Model;
 
-            var rentals = await _rentalProvider.GetByCriteria(searchCriteria, numberOfDays);
+            var rentals = SelectedVersion == ApiVersionEnum.V1
+              ? await _rentalProvider.GetByCriteria(searchCriteria, numberOfDays)
+              : await _rentalV2Provider.GetByCriteria(year, make, model, numberOfDays);
 
             await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -69,6 +83,24 @@ namespace Demo.Ui
             }));
 
         }
+
+
+        private ApiVersionEnum selectedVersion;
+        private string year;
+        private string make;
+        private string model;
+
+        public ApiVersionEnum SelectedVersion
+        {
+            get => selectedVersion; set
+            {
+                selectedVersion = value;
+                NotifyPropertyChanged();
+                RentalItems.Clear();
+            }
+        }
+
+
 
         public ObservableCollection<RentalResult> RentalItems { get; set; }
 
@@ -92,7 +124,7 @@ namespace Demo.Ui
             }
             else
             {
-                var finished = _rentalUploader.Upload(uploadFile);
+                var finished = await _rentalUploader.Upload(uploadFile);
                 if (finished)
                 {
                     MessageBox.Show("File uploaded");

@@ -4,10 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo.Ui"
+        xmlns:model="clr-namespace:Demo.Ui.Models"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" 
         Title="Demo" Height="450" Width="800">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="apiVersion" MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="model:ApiVersionEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -15,7 +26,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="225"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <!--Row 0 -->
@@ -24,15 +35,66 @@
             <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" Text="Upload data.csv to seed rentals, then enter days and search criteria for results."></TextBlock>
         </StackPanel>
         <!--Row 1 -->
-        <Label Margin="2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Number of Days"></Label>
-        <TextBox Margin="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=NumberOfDays}"></TextBox>
+        <Label Margin="2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Select an API Version"></Label>
+        <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Source={StaticResource apiVersion}}" SelectedItem="{Binding SelectedVersion}" ></ComboBox>
         <!--Row 2 -->
-        <Label Margin="2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Search Critera(Year, Make or Model)"></Label>
-        <TextBox Margin="2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=SearchCriteria}"></TextBox>
+        <Label Margin="2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Number of Days"></Label>
+        <TextBox Margin="2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=NumberOfDays}"></TextBox>
         <!--Row 3-->
-        <Button Margin="5"  Grid.Row="3" HorizontalAlignment="Right" IsDefault="True" Grid.Column="0" Grid.ColumnSpan="2" Width="75" Content="Search" Command="{Binding SearchCommand}" ></Button> 
-         <!--Row 4-->
-        <DataGrid Grid.Row="4" Grid.ColumnSpan="2" RenderOptions.EdgeMode="Aliased" IsReadOnly="True" 
+
+        <Grid HorizontalAlignment="Stretch"
+            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+               Visibility="{Binding SelectedVersion,
+            Converter={StaticResource enumToVisibilityConverter},
+            ConverterParameter={x:Static model:ApiVersionEnum.V1}}"
+            >
+
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="225"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Margin="2" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Content="Search Critera(Year, Make or Model)"></Label>
+                <TextBox HorizontalAlignment="Stretch"  Margin="2" Grid.Row="0" Grid.Column="1"  Text="{Binding Mode=OneWayToSource, Path=SearchCriteria}"></TextBox>
+            </Grid>
+
+        </Grid>
+        <Grid HorizontalAlignment="Stretch"
+            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+               Visibility="{Binding SelectedVersion,
+            Converter={StaticResource enumToVisibilityConverter},
+            ConverterParameter={x:Static model:ApiVersionEnum.V2}}"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="225"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--Row 0 -->
+                <Label Margin="2" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Content="Year"></Label>
+                <TextBox Margin="2" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=Year}"></TextBox>
+                <!--Row 1 -->
+                <Label Margin="2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="Make"></Label>
+                <TextBox Margin="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=Make}"></TextBox>
+                <!--Row 2 -->
+                <Label Margin="2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Content="Model"></Label>
+                <TextBox Margin="2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Mode=OneWayToSource, Path=Model}"></TextBox>
+            </Grid>
+
+        </Grid>
+        <!--Row 4-->
+        <Button Margin="5"  Grid.Row="4" HorizontalAlignment="Right" IsDefault="True" Grid.Column="0" Grid.ColumnSpan="2" Width="75" Content="Search" Command="{Binding SearchCommand}" ></Button>
+        <!--Row 5-->
+        <DataGrid Grid.Row="5" Grid.ColumnSpan="2" RenderOptions.EdgeMode="Aliased" IsReadOnly="True" 
                   EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding RentalItems}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Total Rental Cost" Binding="{Binding TotalRentalCost}"></DataGridTextColumn>
@@ -41,7 +103,7 @@
                 <DataGridTextColumn Header="Model" Binding="{Binding Model}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Owner" Binding="{Binding Owner}"></DataGridTextColumn>
             </DataGrid.Columns>
-        </DataGrid>       
-           
+        </DataGrid>
+
     </Grid>
 </Window>

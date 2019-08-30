@@ -65,6 +65,8 @@
     </ApplicationDefinition>
     <Compile Include="Core\AsyncCommand.cs" />
     <Compile Include="Core\CsvFile.cs" />
+    <Compile Include="Core\EnumToVisibilityConverter.cs" />
+    <Compile Include="Models\ApiVersionEnum.cs" />
     <Compile Include="Services\RentalUploader.cs" />
     <Compile Include="Core\IErrorHandler.cs" />
     <Compile Include="MainWindowViewModel.cs" />
