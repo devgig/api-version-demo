@@ -26,7 +26,7 @@ namespace Demo.Shared.Model
         [JsonProperty("id")]
         public int Id { get; }
 
-        [JsonProperty("totalRentalCost")]
+        [JsonIgnore]
         public decimal TotalRentalCost { get; }
 
         [JsonProperty("year")]
@@ -38,7 +38,7 @@ namespace Demo.Shared.Model
         [JsonProperty("model")]
         public string Model { get; }
 
-        [JsonProperty("owner")]
+        [JsonIgnore]
         public string Owner { get; }
     }
 }
