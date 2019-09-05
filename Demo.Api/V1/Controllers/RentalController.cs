@@ -14,10 +14,40 @@ namespace Demo.Api.V1.Controllers
     public class RentalController : ControllerBase
     {
         private readonly IRentalService _rentalService;
-        public RentalController(IRentalService rentalService )
+        public RentalController(IRentalService rentalService)
         {
             _rentalService = rentalService;
         }
+
+        /// <summary>
+        /// Get all rentals 
+        /// </summary>
+        /// <returns>The requested rental.</returns>
+        /// <response code="200">Rentals successfully retrieved.</response>
+        /// <response code="404">No rentals found for the criteria.</response>
+        [HttpGet]
+        [Route("GetAll")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<IEnumerable<RentalResult>>> GetAll()
+        {
+            var rentals = await _rentalService.GetAllRentals();
+            if (rentals != null && rentals.Any())
+                return Ok(rentals.ToArray());
+            else
+                return NotFound();
+        }
+
+        [HttpGet]
+        [Route("GetByCriteria/{criteria}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<IEnumerable<RentalResult>>> GetByCritieria(string criteria)
+        {
+            var rentals = await _rentalService.GetRentalsByCriteria(criteria, 0);
+            return Ok(rentals);
+        }
+
         /// <summary>
         /// Get Rentals based on criteria
         /// </summary>

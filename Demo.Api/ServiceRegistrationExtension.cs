@@ -10,7 +10,6 @@ namespace Demo.Api
             services.AddTransient<IRentalService, RentalService>();
             services.AddTransient<IRentalValidator, RentalValidator>();
 
-
         }
     }
 }

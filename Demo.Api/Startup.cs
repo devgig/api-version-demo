@@ -9,25 +9,54 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Swashbuckle.AspNetCore.Swagger;
+using Autofac;
+using System;
+using Autofac.Extensions.DependencyInjection;
+using System.Web;
 
 namespace Demo.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            // In ASP.NET Core 3.0 env will be an IWebHostingEnvironment, not IHostingEnvironment.
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            this.Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
 
-        /// This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public ILifetimeScope AutofacContainer { get; private set; }
+
+        public void ConfigureContainer(ContainerBuilder builder)
         {
+            //Direct registration with AutoFac if needed.
+           // builder.RegisterModule(new AutofacModule());
+        }
+
+      
+
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddOptions();
+
             services.AddDbContext<RentalDbContext>(opt =>
              opt.UseInMemoryDatabase("RentalList"));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:4200", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
+            });
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddControllersAsServices();
 
             services.AddMvcCore().AddJsonFormatters();
 
@@ -69,7 +98,14 @@ namespace Demo.Api
 
                 });
 
-            services.AddRegisteredServices();
+            // Add Autofac
+            var containerBuilder = new ContainerBuilder();
+            var assemblies = Assembly.GetExecutingAssembly();
+            containerBuilder.RegisterAssemblyTypes(assemblies).AsImplementedInterfaces();
+            // containerBuilder.RegisterModule<DefaultModule>();
+            containerBuilder.Populate(services);
+            var container = containerBuilder.Build();
+            return new AutofacServiceProvider(container);
 
         }
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,9 +121,6 @@ namespace Demo.Api
                 app.UseHsts();
             }
 
-
-            app.UseHttpsRedirection();
-
             app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
@@ -99,8 +132,20 @@ namespace Demo.Api
                     }
                 });
 
+            if (env.IsDevelopment())
+            {
+                app.UseCors(builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200", "http://localhost:3000");
+                });
+
+            }
+
+
+            app.UseHttpsRedirection();
 
             app.UseMvc();
+
 
         }
     }

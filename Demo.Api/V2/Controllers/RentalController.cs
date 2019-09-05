@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Demo.Api.Services;
 using Demo.Shared.Model;
 
-namespace Demo.Api.Controllers
+namespace Demo.Api.V2.Controllers
 {
     [ApiVersion("2.0")]
     [ApiController]
