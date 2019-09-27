@@ -14,7 +14,7 @@ namespace Demo.Ui.Services
     {
         public async  Task<IEnumerable<RentalResult>> GetByCriteria(string criteria, int numberOfDays)
         {
-            RestClient restClient = new RestClient("https://localhost:44308/api/v1/rental");
+            RestClient restClient = new RestClient("https://localhost:5001/api/v1/rental");
             RestRequest restRequest = new RestRequest(Method.GET);
             restRequest.AddParameter("criteria", criteria);
             restRequest.AddParameter("numberOfDays", numberOfDays);
@@ -34,7 +34,7 @@ namespace Demo.Ui.Services
      
         public async Task<IEnumerable<RentalResult>> GetByCriteria(string year, string make, string model, int numberOfDays)
         {
-            RestClient restClient = new RestClient("https://localhost:44308/api/v2/rental");
+            RestClient restClient = new RestClient("https://localhost:5001/api/v2/rental");
             RestRequest restRequest = new RestRequest(Method.GET);
             restRequest.AddParameter("year", year);
             restRequest.AddParameter("make", make);

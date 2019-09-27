@@ -47,7 +47,7 @@ namespace Demo.Ui.Services
             }
 
             var json = JsonConvert.SerializeObject(list.ToArray());
-            RestClient restClient = new RestClient("https://localhost:44308/api/v1/rental");
+            RestClient restClient = new RestClient("https://localhost:5001/api/v2/rental");
             RestRequest restRequest = new RestRequest(Method.POST);
             restRequest.AddParameter("application/json", json, ParameterType.RequestBody);
             var response = await restClient.ExecutePostTaskAsync(restRequest);

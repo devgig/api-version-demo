@@ -75,6 +75,8 @@ namespace Demo.Ui
               ? await _rentalProvider.GetByCriteria(searchCriteria, numberOfDays)
               : await _rentalV2Provider.GetByCriteria(year, make, model, numberOfDays);
 
+            if (rentals == null) return;
+
             await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
 

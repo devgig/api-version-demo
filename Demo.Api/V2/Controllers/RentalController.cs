@@ -41,5 +41,25 @@ namespace Demo.Api.V2.Controllers
                 return NotFound();
         }
 
+        /// <summary>
+        /// Uploads Rentals
+        /// </summary>
+        /// <param name="rentals">List of rentals.</param>
+        /// <response code="201">The upload was successfull.</response>
+        /// <response code="400">The upload is invalid.</response>
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult> Put([FromBody] Rental[] rentals)
+        {
+            var result = await _rentalService.SaveRentals(rentals);
+
+            if (result)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
+
     }
 }
