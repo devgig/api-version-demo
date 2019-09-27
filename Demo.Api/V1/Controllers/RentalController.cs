@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Demo.Api.Services;
 using Demo.Shared.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Demo.Api.V1.Controllers
 {
@@ -11,6 +12,7 @@ namespace Demo.Api.V1.Controllers
     [ApiVersion("2.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize]
     public class RentalController : ControllerBase
     {
         private readonly IRentalService _rentalService;

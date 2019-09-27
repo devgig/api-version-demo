@@ -13,33 +13,18 @@ using Autofac;
 using System;
 using Autofac.Extensions.DependencyInjection;
 using System.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Demo.Api
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            // In ASP.NET Core 3.0 env will be an IWebHostingEnvironment, not IHostingEnvironment.
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            this.Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
-        public ILifetimeScope AutofacContainer { get; private set; }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            //Direct registration with AutoFac if needed.
-           // builder.RegisterModule(new AutofacModule());
-        }
-
-      
 
         /// This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -51,7 +36,20 @@ namespace Demo.Api
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:4200", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
+                options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:4200", "http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
+            });
+            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = Configuration["Auth0:Authority"];
+                options.Audience = Configuration["Auth0:Audience"];
             });
 
             services.AddMvc()
@@ -136,13 +134,18 @@ namespace Demo.Api
             {
                 app.UseCors(builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200", "http://localhost:3000");
+                    builder.WithOrigins("http://localhost:4200", "http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
 
             }
 
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseMvc();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Demo.Api.Services;
 using Demo.Shared.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Demo.Api.V2.Controllers
 {
